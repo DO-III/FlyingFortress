@@ -13,13 +13,13 @@ public class Player : Area2D //Extends Area2D
 	private Vector2 screenSize;
 	private Vector2 velocity = Vector2.Zero;
 	
-	private Sprite mySprite;
+	private AnimatedSprite mySprite;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		screenSize = GetViewportRect().Size;
-		mySprite = GetNode("Sprite") as Sprite;
+		mySprite = GetNode("AnimatedSprite") as AnimatedSprite;
 		
 	}
 	
@@ -28,13 +28,12 @@ public class Player : Area2D //Extends Area2D
 	public override void _Process(float delta) {
 		//Change frame according to movement.
 		if (velocity.x < 0) {
-			mySprite.SetFrame(0);
+			mySprite.Play("Left");
 		} else if (velocity.x > 0) {
-			mySprite.SetFrame(2);
+			mySprite.Play("Right");
 		} else {
-			mySprite.SetFrame(1);
-		}
-		
+			mySprite.Play("Straight");
+		}	
 	}
 	
 	
