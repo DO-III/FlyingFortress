@@ -14,6 +14,7 @@ public class Player : Area2D //Extends Area2D
 	private Vector2 velocity = Vector2.Zero;
 	
 	private AnimatedSprite mySprite;
+	private Node2D myFiringPositions;
 
 	//Store loaded player bullet.
 	/*
@@ -31,6 +32,7 @@ public class Player : Area2D //Extends Area2D
 	{
 		screenSize = GetViewportRect().Size;
 		mySprite = GetNode("AnimatedSprite") as AnimatedSprite;
+		myFiringPositions = GetNode("FiringPositions") as Node2D;
 		
 	}
 	
@@ -55,9 +57,16 @@ public class Player : Area2D //Extends Area2D
 			Either we typecast to a node or declare it separately.
 			For readability, we just declare separately.
 			*/
-			Node bullet = _bulletScene.Instance();
-			((Bullet)bullet).SetPos(Position);
-			GetTree().GetRoot().AddChild(bullet);
+
+			foreach(Node2D child in myFiringPositions.GetChildren()) {
+				Node bullet = _bulletScene.Instance();
+
+				//We use GlobalPosition to make sure it spawns next to the player.
+				((Bullet)bullet).GlobalPosition = child.GlobalPosition;
+				GetTree().GetRoot().AddChild(bullet);
+			}
+
+			
 
 			
 			/*
