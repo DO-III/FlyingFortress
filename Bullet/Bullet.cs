@@ -16,6 +16,19 @@ public class Bullet : Area2D
 	{
 		
 	}
+	
+	/*
+	Manage the location of the bullet on the screen and process
+	how it should behave.
+	
+	The bullet moves upwards at the speed defined by SPEED.
+	*/
+	public override void _PhysicsProcess(float delta) {
+
+		Vector2 byThisMuch = new Vector2(0, -SPEED * delta);
+
+		Position += byThisMuch;
+	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
