@@ -15,6 +15,17 @@ public class Player : Area2D //Extends Area2D
 	
 	private AnimatedSprite mySprite;
 
+	//Store loaded player bullet.
+	/*
+	First big problem; C# Godot can't preload!
+
+	How we do this is that we instead retrieve the bullet scene as a PackedScene.
+	We use GD.Load typecasted as PackedScene and point to the tscn file of the bullet.
+	We name with an underscore at the start by convention as this is a resource, not
+	a normal type.
+	*/
+	private PackedScene _bulletScene = (PackedScene)GD.Load("res://Bullet/Bullet.tscn");
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -34,6 +45,31 @@ public class Player : Area2D //Extends Area2D
 		} else {
 			mySprite.Play("Straight");
 		}	
+
+
+		//Check if we're doing the shooty-shoot.
+		if (Input.IsActionPressed("shoot")) {
+			/*
+			We can't just "drop the bullet in" either - it's the wrong type!
+
+			Either we typecast to a node or declare it separately.
+			For readability, we just declare separately.
+			*/
+			Node bullet = _bulletScene.Instance();
+			((Bullet)bullet).SetPos(Position);
+			GetTree().GetRoot().AddChild(bullet);
+
+			
+			/*
+			We do not use this line:
+			AddChild(bullet);
+
+			That would cause issues because it would be a child of the Player,
+			not the Root. As such, it inherits some Player behavior which causes
+			jankiness.
+			*/
+
+		}
 	}
 	
 	
