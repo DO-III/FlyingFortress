@@ -34,6 +34,14 @@ public class Bullet : Area2D
 	public void SetPos(Vector2 pos) {
 		Position = pos;
 	}
+
+	/*
+	Delete bullets that leave the screen to keep the asset
+	tree from getting overburdened.
+	*/
+	public void _on_VisibilityNotifier2D_screen_exited() {
+		QueueFree();
+	}
 	
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
