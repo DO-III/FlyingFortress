@@ -8,13 +8,18 @@ public class Player : Area2D //Extends Area2D
 	// private string b = "text";
 	
 	[Export]
-	private float SPEED = 200; //Move speed.
+	private float SPEED = 200; //In pixels per second.
+
+	[Export]
+	private float DELAY = 0.2F; //In seconds.
 	
 	private Vector2 screenSize;
 	private Vector2 velocity = Vector2.Zero;
 	
 	private AnimatedSprite mySprite;
 	private Node2D myFiringPositions;
+	
+	private Timer myFireRateTimer;
 
 	//Store loaded player bullet.
 	/*
@@ -33,6 +38,7 @@ public class Player : Area2D //Extends Area2D
 		screenSize = GetViewportRect().Size;
 		mySprite = GetNode("AnimatedSprite") as AnimatedSprite;
 		myFiringPositions = GetNode("FiringPositions") as Node2D;
+		myFireRateTimer = GetNode("FireDelayTimer") as Timer;
 		
 	}
 	
@@ -50,25 +56,23 @@ public class Player : Area2D //Extends Area2D
 
 
 		//Check if we're doing the shooty-shoot.
-		if (Input.IsActionPressed("shoot")) {
+		if (Input.IsActionPressed("shoot") && myFireRateTimer.IsStopped()) {
 			/*
 			We can't just "drop the bullet in" either - it's the wrong type!
 
 			Either we typecast to a node or declare it separately.
 			For readability, we just declare separately.
 			*/
+			myFireRateTimer.Start(DELAY);
+
 
 			foreach(Node2D child in myFiringPositions.GetChildren()) {
 				Node bullet = _bulletScene.Instance();
-
 				//We use GlobalPosition to make sure it spawns next to the player.
 				((Bullet)bullet).GlobalPosition = child.GlobalPosition;
 				GetTree().GetRoot().AddChild(bullet);
 			}
 
-			
-
-			
 			/*
 			We do not use this line:
 			AddChild(bullet);
