@@ -1,4 +1,4 @@
-Flying Fortress - A roguish top down shooter made in Godot.
+Flying Fortress - A top-down shooter made to learn Godot.
 
 100% asbestos free.
 
