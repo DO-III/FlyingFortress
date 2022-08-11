@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Meteor : Area2D
+public class Meteor : Enemy
 {
 
     [Export]
@@ -16,7 +16,7 @@ public class Meteor : Area2D
     [Export]
     private int MAX_ROTATE = 20;
 
-    private int life = 20; //Starting health of a Meteor.
+    private int METEOR_LIFE = 20; //Starting health of a Meteor.
 
     private float moveRate = 0; //Actual speed of meteor defined in Ready.
     private float rotateRate = 0; //In degrees!
@@ -28,6 +28,9 @@ public class Meteor : Area2D
     determined by the values of the MIN and MAX constants for each.
     */
     public override void _Ready() {
+
+        setLife(METEOR_LIFE);
+
         Random rand = new Random();
 
         moveRate = rand.Next(MIN_SPEED, MAX_SPEED);
@@ -53,20 +56,7 @@ public class Meteor : Area2D
         QueueFree();
     }
 
-    /*
-    Damage the meteor by the amount specified.
-
-    This damages the enemy and decreases its life value by 1 each time it is called.
-    For example, if the amount entered is 5, it will deal 5 points of damage to the meteor.
-
-    Once the meteor drops to 0 health or below, it is destroyed.
-    */
-    public void damage(int amount) {
-        life -= amount;
-        if (life <= 0) {
-            QueueFree();
-        }
-    }
+   
 
 
 

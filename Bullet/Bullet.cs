@@ -64,12 +64,9 @@ public class Bullet : Area2D
     public void _on_Bullet_area_entered(Area2D area)
     {
         //TODO This will not work!
-        if (area.IsInGroup("damageable")) {
-            //area.damage(damagePerBullet);
-
+        if (area is Enemy) {
+            ((Enemy) area).damage(damagePerBullet);
+            QueueFree();
         }
-
-
-
     }
 }
