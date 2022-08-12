@@ -12,6 +12,9 @@ public class Player : Area2D //Extends Area2D
 
 	[Export]
 	private float DELAY = 0.2F; //In seconds.
+
+	[Export]
+	private int lifeRemaining = 3; //In individual points.
 	
 	private Vector2 screenSize;
 	private Vector2 velocity = Vector2.Zero;
@@ -20,6 +23,8 @@ public class Player : Area2D //Extends Area2D
 	private Node2D myFiringPositions;
 	
 	private Timer myFireRateTimer;
+
+	private bool playerInArea = false; //track whether the player is in an area.
 
 	//Store loaded player bullet.
 	/*
@@ -108,13 +113,44 @@ public class Player : Area2D //Extends Area2D
 		velocity = velocity.Normalized() * SPEED;
 		
 		//Ensure we don't actually leave the screen.
-		
 		Position += velocity * delta;
 		Position = new Vector2(
 			x: Mathf.Clamp(Position.x, 0, screenSize.x),
 			y: Mathf.Clamp(Position.y, 0, screenSize.y)
 		);
-		
-		
+	}
+
+
+	/*
+	Damage the player.
+
+	This function takes of the amount of health specified. When the player's health
+	reaches or drops below zero, the player piece is destroyed and any game-over behavior
+	should take place.
+	*/
+	public void damage(int amount) {
+		lifeRemaining -= amount;
+		GD.Print(String.Format("Life = {0}", lifeRemaining));
+		if (lifeRemaining <= 0) {
+			//TODO death behavior.
+			GD.Print("Player has died");
+			QueueFree();
+		}
+	}
+
+	/*
+	Defines behaviors for player-hits-thing cases.
+
+	The player should be able to handle it's own collision logic. The tutorial suggests
+	that the meteor should have this logic, but we know that there are many kinds of
+	dangerous (and helpful!) entities in the game. Having the player
+	handle the logic prevents any assumptions over what should or should-not count, while
+	keeping it all confined to one place.
+	*/
+	public void _on_Player_area_entered(Area2D area) {
+		//Enemies and bullets uniformly do 1 point of damage.
+		if (area is Enemy) {
+            damage(1);
+        }
 	}
 }
